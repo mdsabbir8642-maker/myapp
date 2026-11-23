@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#102c50">
+<title>Gasco BD — Customer App Demo</title>
+<style>
+:root{--navy:#102c50;--blue:#087db5;--cyan:#dff5ff;--bg:#f3f7fb;--ink:#172536;--muted:#657589;--line:#dce5ee;--white:#fff;--green:#13845b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif;color:var(--ink)}
+header{background:linear-gradient(135deg,#102c50,#087db5);color:#fff;padding:22px 18px 28px;border-radius:0 0 24px 24px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}.brand{font-size:22px;font-weight:850;letter-spacing:.5px}.tag{font-size:11px;color:#d9f2ff}
+.pill{font-size:11px;background:#ffffff20;border:1px solid #ffffff50;padding:6px 9px;border-radius:99px}
+h1{font-size:23px;line-height:1.35;margin:23px 0 5px}header p{margin:0;color:#dceeff;font-size:13px}
+main{max-width:720px;margin:-12px auto 40px;padding:0 14px}
+.nav{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;background:#fff;padding:8px;border-radius:16px;box-shadow:0 6px 22px #17324d12}
+.nav button{border:0;background:transparent;border-radius:11px;padding:11px 4px;color:#526274;font-weight:700;font-size:12px}
+.nav button.active{background:var(--cyan);color:var(--navy)}
+.panel{display:none;margin-top:14px}.panel.active{display:block}
+.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:17px;margin:13px 0;box-shadow:0 4px 15px #17324d08}
+h2{font-size:18px;margin:0 0 4px;color:var(--navy)}.sub{font-size:12px;color:var(--muted);margin:0 0 15px}
+label{display:block;font-size:13px;font-weight:700;margin:12px 0 6px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #ccd8e4;border-radius:11px;background:#fff;color:var(--ink);font:inherit;font-size:14px}
+textarea{min-height:95px;resize:vertical}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.brandgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.choice{border:1px solid var(--line);border-radius:12px;padding:10px 5px;text-align:center;font-size:12px;font-weight:750;cursor:pointer;background:#fff}
+.choice.selected{border:2px solid var(--blue);background:#eef9ff;color:var(--navy)}
+.dot{display:block;width:19px;height:19px;border-radius:50%;margin:0 auto 6px;border:1px solid #0002}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+button.primary,button.secondary{border:0;border-radius:12px;padding:12px 15px;font-weight:750;font-size:13px;cursor:pointer}
+.primary{background:var(--navy);color:#fff;flex:1}.secondary{background:#e8f5fb;color:var(--navy)}
+.note{font-size:11px;color:var(--muted);line-height:1.5;margin-top:9px}
+.status{padding:11px;border-radius:11px;background:#eaf8f1;color:#116344;font-size:13px;margin-top:12px;display:none}
+.feedback-type{display:flex;gap:8px;flex-wrap:wrap}.feedback-type label{margin:0;border:1px solid var(--line);padding:9px 11px;border-radius:10px;font-size:12px}
+.entry{border:1px solid var(--line);padding:12px;border-radius:12px;margin-top:9px;font-size:13px}.entry small{color:var(--muted)}
+footer{text-align:center;color:var(--muted);font-size:11px;padding:20px}
+@media(max-width:420px){.grid{grid-template-columns:1fr}.brandgrid{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+<header>
+ <div class="top"><div><div class="brand">GASCO BD</div><div class="tag">LPG Cylinder Home Delivery</div></div><span class="pill">Customer Demo</span></div>
+ <h1>আপনার বাসায় গ্যাস পৌঁছে যাবে</h1><p>অর্ডার দিন, ঠিকানা জানান, ডেলিভারি নিন।</p>
+</header>
+<main>
+ <nav class="nav">
+  <button class="active" data-tab="order">অর্ডার</button>
+  <button data-tab="feedback">মতামত / অভিযোগ</button>
+  <button data-tab="history">আমার তথ্য</button>
+ </nav>
+
+ <section id="order" class="panel active">
+  <div class="card">
+   <h2>গ্যাস সিলিন্ডার অর্ডার</h2><p class="sub">আপনার পছন্দের ব্র্যান্ড ও সিলিন্ডার বেছে নিন।</p>
+   <label>ব্র্যান্ড</label>
+   <div class="brandgrid" id="brands">
+    <div class="choice selected" data-brand="Petromax"><span class="dot" style="background:#e978a9"></span>Petromax</div>
+    <div class="choice" data-brand="BM LPG"><span class="dot" style="background:#df3e3e"></span>BM LPG</div>
+    <div class="choice" data-brand="Ay Gaz"><span class="dot" style="background:linear-gradient(#75c9ed 65%,#e44b4b 65%)"></span>Ay Gaz</div>
+   </div>
+   <div class="grid">
+    <div><label for="size">সিলিন্ডারের সাইজ</label><select id="size"><option>12 kg</option><option>35 kg</option></select></div>
+    <div><label for="qty">পরিমাণ</label><input id="qty" type="number" min="1" value="1"></div>
+   </div>
+   <label>সিলিন্ডারের ধরন</label>
+   <select id="cylinder"><option value="refill">খালি সিলিন্ডার আছে — শুধু গ্যাস রিফিল</option><option value="new">খালি সিলিন্ডার নেই — নতুন সিলিন্ডারসহ</option></select>
+   <label for="name">আপনার নাম</label><input id="name" placeholder="নাম লিখুন">
+   <label for="phone">মোবাইল নম্বর</label><input id="phone" inputmode="tel" placeholder="01XXXXXXXXX">
+   <label for="address">সম্পূর্ণ ডেলিভারি ঠিকানা</label><textarea id="address" placeholder="বাসা/রোড, এলাকা, পরিচিত স্থান লিখুন"></textarea>
+   <div class="actions"><button class="secondary" id="gps">আমার GPS লোকেশন নিন</button></div>
+   <p class="note" id="gpsnote">GPS ব্যবহার করতে আপনার অনুমতি লাগবে। চাইলে ঠিকানা নিজেও লিখতে পারবেন।</p>
+   <label for="landmark">নিকটস্থ পরিচিত স্থান (ঐচ্ছিক)</label><input id="landmark" placeholder="যেমন: মিরপুর ১০ নম্বর গোলচত্বর">
+   <div class="actions"><button class="primary" id="placeOrder">অর্ডার জমা দিন (ডেমো)</button></div>
+   <div class="status" id="orderStatus"></div>
+   <p class="note">এটি পরীক্ষামূলক ডেমো। এখনো অর্ডার Gasco BD-তে পাঠানো বা পেমেন্ট নেওয়া হয় না।</p>
+  </div>
+ </section>
+
+ <section id="feedback" class="panel">
+  <div class="card">
+   <h2>আপনার মতামত আমাদের জানান</h2><p class="sub">অ্যাপে সমস্যা, পরামর্শ বা অভিযোগ থাকলে লিখুন।</p>
+   <label for="fName">আপনার নাম (ঐচ্ছিক)</label><input id="fName" placeholder="নাম লিখুন">
+   <label for="fPhone">মোবাইল নম্বর (ঐচ্ছিক)</label><input id="fPhone" inputmode="tel" placeholder="যোগাযোগের নম্বর">
+   <label>মতামতের ধরন</label>
+   <div class="feedback-type">
+    <label><input type="radio" name="ftype" value="সমস্যা" checked style="width:auto"> সমস্যা</label>
+    <label><input type="radio" name="ftype" value="অভিযোগ" style="width:auto"> অভিযোগ</label>
+    <label><input type="radio" name="ftype" value="পরামর্শ" style="width:auto"> পরামর্শ</label>
+   </div>
+   <label for="fMessage">বিস্তারিত লিখুন</label><textarea id="fMessage" placeholder="কী সমস্যা হয়েছে বা কী পরিবর্তন চান, লিখুন..." required></textarea>
+   <div class="actions"><button class="primary" id="sendFeedback">মতামত জমা দিন (ডেমো)</button></div>
+   <div class="status" id="feedbackStatus"></div>
+   <p class="note">এই ডেমোতে মতামত শুধু এই ডিভাইসের ব্রাউজারে সংরক্ষিত হবে। বাস্তব সংস্করণে এটি Admin Panel-এ যাবে।</p>
+  </div>
+ </section>
+
+ <section id="history" class="panel">
+  <div class="card"><h2>এই ডিভাইসের ডেমো তথ্য</h2><p class="sub">এখানে পরীক্ষামূলকভাবে জমা দেওয়া অর্ডার ও মতামত দেখা যাবে।</p><div id="saved"></div>
+   <div class="actions"><button class="secondary" id="clear">ডেমো তথ্য মুছুন</button></div>
+  </div>
+ </section>
+</main>
+<footer>GASCO BD • প্রাথমিক পরীক্ষামূলক সংস্করণ</footer>
+<script>
+const $=id=>document.getElementById(id);
+let selectedBrand='Petromax', coords=null;
+document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>{
+ document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x===b));
+ document.querySelectorAll('.panel').forEach(x=>x.classList.toggle('active',x.id===b.dataset.tab));
+ if(b.dataset.tab==='history') renderSaved();
+}));
+document.querySelectorAll('#brands .choice').forEach(c=>c.addEventListener('click',()=>{
+ selectedBrand=c.dataset.brand;document.querySelectorAll('#brands .choice').forEach(x=>x.classList.toggle('selected',x===c));
+}));
+function read(key){try{return JSON.parse(localStorage.getItem(key)||'[]')}catch(e){return []}}
+function save(key,obj){const a=read(key);a.unshift(obj);localStorage.setItem(key,JSON.stringify(a))}
+$('gps').onclick=()=>{
+ if(!navigator.geolocation){$('gpsnote').textContent='এই ব্রাউজারে GPS সুবিধা পাওয়া যাচ্ছে না। ঠিকানা লিখে দিন।';return}
+ $('gpsnote').textContent='লোকেশন নেওয়ার চেষ্টা চলছে...';
+ navigator.geolocation.getCurrentPosition(p=>{coords={lat:p.coords.latitude,lng:p.coords.longitude};$('gpsnote').textContent='লোকেশন নেওয়া হয়েছে। অর্ডারের সঙ্গে স্থানাঙ্ক সংরক্ষিত হবে।';},
+ ()=>{$('gpsnote').textContent='লোকেশন পাওয়া যায়নি বা অনুমতি দেওয়া হয়নি। ঠিকানা লিখে অর্ডার দিন।';},{enableHighAccuracy:true,timeout:10000});
+};
+$('placeOrder').onclick=()=>{
+ const name=$('name').value.trim(),phone=$('phone').value.trim(),address=$('address').value.trim(),qty=Number($('qty').value);
+ if(!name||!phone||!address||!Number.isInteger(qty)||qty<1){$('orderStatus').style.display='block';$('orderStatus').textContent='অনুগ্রহ করে নাম, মোবাইল, ঠিকানা এবং সঠিক পরিমাণ পূরণ করুন।';return}
+ const order={date:new Date().toLocaleString('bn-BD'),name,phone,address,landmark:$('landmark').value,brand:selectedBrand,size:$('size').value,qty,cylinder:$('cylinder').value,coords};
+ save('gasco_orders',order);$('orderStatus').style.display='block';$('orderStatus').textContent='ডেমো অর্ডার এই ডিভাইসে সংরক্ষিত হয়েছে। এটি এখনো দোকানে পাঠানো হয়নি।';renderSaved();
+};
+$('sendFeedback').onclick=()=>{
+ const message=$('fMessage').value.trim();if(!message){$('feedbackStatus').style.display='block';$('feedbackStatus').textContent='দয়া করে আপনার মতামত বা সমস্যাটি লিখুন।';return}
+ const type=document.querySelector('input[name="ftype"]:checked').value;
+ save('gasco_feedback',{date:new Date().toLocaleString('bn-BD'),name:$('fName').value.trim(),phone:$('fPhone').value.trim(),type,message});
+ $('feedbackStatus').style.display='block';$('feedbackStatus').textContent='আপনার মতামত এই ডিভাইসে সংরক্ষিত হয়েছে। ধন্যবাদ!';$('fMessage').value='';renderSaved();
+};
+function renderSaved(){
+ const orders=read('gasco_orders'),feedback=read('gasco_feedback');
+ let out='';
+ if(!orders.length&&!feedback.length)out='<p class="note">এখনো কোনো ডেমো অর্ডার বা মতামত জমা হয়নি।</p>';
+ orders.forEach(o=>out+=`<div class="entry"><b>অর্ডার • ${o.brand} ${o.size} × ${o.qty}</b><br>${o.name} • ${o.phone}<br>${o.address}<br><small>${o.date} • ${o.cylinder==='refill'?'রিফিল':'নতুন সিলিন্ডারসহ'}</small></div>`);
+ feedback.forEach(f=>out+=`<div class="entry"><b>${f.type}</b><br>${f.message}<br><small>${f.name||'নাম দেওয়া হয়নি'} • ${f.date}</small></div>`);
+ $('saved').innerHTML=out;
+}
+$('clear').onclick=()=>{if(confirm('এই ডিভাইসের সব ডেমো তথ্য মুছবেন?')){localStorage.removeItem('gasco_orders');localStorage.removeItem('gasco_feedback');renderSaved()}};
+renderSaved();
+</script>
+</body></html>
